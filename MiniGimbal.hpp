@@ -45,10 +45,10 @@ constructor_args:
 template_args: []
 required_hardware: []
 depends:
-  - qdu-future/CMD
-  - qdu-future/Motor
-  - qdu-future/BMI088
-  - qdu-future/Referee
+  - pldx/CMD
+  - pldx/Motor
+  - pldx/BMI088
+  - pldx/Referee
 === END MANIFEST === */
 // clang-format on
 
