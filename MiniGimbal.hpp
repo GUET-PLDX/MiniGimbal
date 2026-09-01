@@ -218,8 +218,8 @@ class MiniGimbal : public LibXR::Application {
     }
 
     pit_ = euler_.Pitch();
-    if (pit_ > M_PI) {
-      pit_ = pit_ - 2 * M_PI;
+    if (pit_ > static_cast<float>(LibXR::PI)) {
+      pit_ = pit_ - static_cast<float>(LibXR::TWO_PI);
     }
   }
 
