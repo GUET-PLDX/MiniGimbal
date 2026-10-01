@@ -324,16 +324,8 @@ class MiniGimbal : public LibXR::Application {
       LibXR::Thread::Sleep(2);
     }
 
-    const float LAST_PIT_ANGLE = motor_small_pitch_feedback_.abs_angle;
-    const float DELTA_PIT_ANGLE =
-        motor_small_pitch_feedback_.abs_angle - LAST_PIT_ANGLE;
-    pit_angle_ += DELTA_PIT_ANGLE / trig_gear_ratio_;
-
-    const float LAST_SCOPE_ANGLE = motor_scope_feedback_.abs_angle;
-    const float DELTA_SCOPE_ANGLE =
-        motor_scope_feedback_.abs_angle - LAST_SCOPE_ANGLE;
-    scope_angle_ += DELTA_SCOPE_ANGLE / trig_gear_ratio_;
-
+    // 归位期间 ThreadFunc 仍在 Update() 中逐周期累计 pit_angle_/scope_angle_，
+    // 此处直接以累计角度作为归位后的零点，不能再用单次 abs_angle 差值重复累计
     init_pit_angle_ = pit_angle_;
     init_scope_angle_ = scope_angle_;
   }
