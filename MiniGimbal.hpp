@@ -217,10 +217,8 @@ class MiniGimbal : public LibXR::Application {
       init_flag_ = false;
     }
 
-    pit_ = euler_.Pitch();
-    if (pit_ > static_cast<float>(LibXR::PI)) {
-      pit_ = pit_ - static_cast<float>(LibXR::TWO_PI);
-    }
+    // CycleValue 差值将俯仰角折算到 [-π, π)
+    pit_ = LibXR::CycleValue<float>(euler_.Pitch()) - 0.0f;
   }
 
   void Control() {
