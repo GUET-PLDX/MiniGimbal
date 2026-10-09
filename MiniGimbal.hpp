@@ -194,8 +194,15 @@ class MiniGimbal : public LibXR::Application {
     const float LAST_PIT_ANGLE = motor_small_pitch_feedback_.abs_angle;
     const float LAST_SCOPE_ANGLE = motor_scope_feedback_.abs_angle;
 
-    motor_small_pitch_->Update();
-    motor_scope_->Update();
+    pit_motor_online_ = motor_small_pitch_->Update() == LibXR::ErrorCode::OK;
+    scope_motor_online_ = motor_scope_->Update() == LibXR::ErrorCode::OK;
+    if (!pit_motor_online_ || !scope_motor_online_) {
+      pid_pit_angle_.Reset();
+      pid_pit_omega_.Reset();
+      pid_scope_angle_.Reset();
+      pid_scope_omega_.Reset();
+      return;
+    }
     motor_small_pitch_feedback_ = motor_small_pitch_->GetFeedback();
     motor_scope_feedback_ = motor_scope_->GetFeedback();
 
@@ -222,6 +229,11 @@ class MiniGimbal : public LibXR::Application {
   }
 
   void Control() {
+    if (!pit_motor_online_ || !scope_motor_online_) {
+      motor_small_pitch_->Relax();
+      motor_scope_->Relax();
+      return;
+    }
     if (pit_mode_ == PitMode::PITRELAX &&
         scope_mode_ == ScopeMode::SCOPERELAX) {
       motor_small_pitch_->Relax();
@@ -396,6 +408,8 @@ class MiniGimbal : public LibXR::Application {
 
   Motor::Feedback motor_small_pitch_feedback_;
   Motor::Feedback motor_scope_feedback_;
+  bool pit_motor_online_ = false;
+  bool scope_motor_online_ = false;
 
   LibXR::EulerAngle<float> euler_;
 
