@@ -3,52 +3,11 @@
 // clang-format off
 /* === MODULE MANIFEST V2 ===
 module_description: Mini Gimbal module for small gimbal control
-constructor_args:
-  - task_stack_depth: 1536
-  - pid_pit_angle:
-      k: 1.0
-      p: 1.0
-      i: 0.0
-      d: 0.0
-      i_limit: 0.0
-      out_limit: 0.0
-      cycle: false
-  - pid_pit_omega:
-      k: 1.0
-      p: 5.0
-      i: 0.0
-      d: 0.0
-      i_limit: 0.0
-      out_limit: 0.0
-      cycle: false
-  - pid_scope_angle:
-      k: 1.0
-      p: 1.0
-      i: 0.0
-      d: 0.0
-      i_limit: 0.0
-      out_limit: 0.0
-      cycle: false
-  - pid_scope_omega:
-      k: 1.0
-      p: 0.5
-      i: 0.0
-      d: 0.0
-      i_limit: 0.0
-      out_limit: 0.0
-      cycle: false
-  - motor_pitch: '@&motor_small_pit'
-  - motor_scope: '@&motor_scope'
-  - scope_open_angle: 0.0
-  - referee: '@&ref'
-  - thread_priority: LibXR::Thread::Priority::MEDIUM
-template_args: []
-required_hardware: []
 depends:
-  - pldx/CMD
-  - pldx/Motor
-  - pldx/BMI088
-  - pldx/Referee
+- id: GUET-PLDX/CMD
+- id: GUET-PLDX/Motor
+- id: GUET-PLDX/BMI088
+- id: GUET-PLDX/Referee
 === END MANIFEST === */
 // clang-format on
 
@@ -57,8 +16,8 @@ depends:
 
 #include "Motor.hpp"
 #include "Referee.hpp"
-#include "app_framework.hpp"
 #include "event.hpp"
+#include "libxr.hpp"
 #include "libxr_def.hpp"
 #include "libxr_time.hpp"
 #include "pid.hpp"
@@ -89,10 +48,9 @@ enum class ScopeMode : uint8_t {
 
 constexpr uint16_t UI_MINI_GIMBAL_LAYER = 1;
 
-class MiniGimbal : public LibXR::Application {
+class MiniGimbal {
  public:
   MiniGimbal(
-      LibXR::HardwareContainer& hw, LibXR::ApplicationManager& app,
       uint32_t task_stack_depth, LibXR::PID<float>::Param pid_pit_angle,
       LibXR::PID<float>::Param pid_pit_omega,
       LibXR::PID<float>::Param pid_scope_angle,
@@ -107,8 +65,6 @@ class MiniGimbal : public LibXR::Application {
         motor_scope_(motor_scope),
         scope_open_angle_(scope_open_angle),
         referee_(referee) {
-    UNUSED(app);
-
     thread_.Create(this, ThreadFunc, "MiniGimbalThread", task_stack_depth,
                    thread_priority);
 
@@ -280,7 +236,7 @@ class MiniGimbal : public LibXR::Application {
     motor_control(motor_scope_, motor_scope_feedback_, scope_out);
   }
 
-  void OnMonitor() override {}
+  void OnMonitor() {}
 
   LibXR::Event& GetEvent() { return minigimbal_event_; }
 
