@@ -4,10 +4,10 @@
 /* === MODULE MANIFEST V2 ===
 module_description: Mini Gimbal module for small gimbal control
 depends:
-- pldx/CMD@master
-- pldx/Motor@master
-- pldx/BMI088@master
-- pldx/Referee@master
+- pldx/CMD@mc02-static
+- pldx/Motor@mc02-static
+- pldx/BMI088@mc02-static
+- pldx/Referee@mc02-static
 === END MANIFEST === */
 // clang-format on
 
