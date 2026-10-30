@@ -6,7 +6,7 @@ module_description: Mini Gimbal module for small gimbal control
 depends:
 - id: GUET-PLDX/CMD
 - id: GUET-PLDX/Motor
-- id: GUET-PLDX/BMI088
+- id: xrobot-org/BMI088
 - id: GUET-PLDX/Referee
 === END MANIFEST === */
 // clang-format on
