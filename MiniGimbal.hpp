@@ -381,6 +381,28 @@ class MiniGimbal {
   }
 
  private:
+  PitMode pit_mode_ = PitMode::PITRELAX;
+  ScopeMode scope_mode_ = ScopeMode::SCOPERELAX;
+  float dt_ = 0.0f;
+  LibXR::MicrosecondTimestamp last_wakeup_;
+  LibXR::MicrosecondTimestamp last_online_time_;
+
+  float target_pit_ = 0.0f;
+  float target_scope_ = 0.0f;
+  bool init_flag_ = true;
+  LibXR::MillisecondTimestamp first_enter_time_ = 0;
+
+  LibXR::EulerAngle<float> euler_;
+  float pit_angle_ = 0.0f;
+  float scope_angle_ = 0.0f;
+  float init_pit_angle_ = 0.0f;
+  float init_scope_angle_ = 0.0f;
+  float pit_ = 0.0f;
+  Motor::Feedback motor_small_pitch_feedback_;
+  Motor::Feedback motor_scope_feedback_;
+  bool pit_motor_online_ = false;
+  bool scope_motor_online_ = false;
+
   LibXR::PID<float> pid_pit_angle_;
   LibXR::PID<float> pid_pit_omega_;
   LibXR::PID<float> pid_scope_angle_;
@@ -388,38 +410,11 @@ class MiniGimbal {
   Motor* motor_small_pitch_;
   Motor* motor_scope_;
 
-  Motor::Feedback motor_small_pitch_feedback_;
-  Motor::Feedback motor_scope_feedback_;
-  bool pit_motor_online_ = false;
-  bool scope_motor_online_ = false;
-
-  LibXR::EulerAngle<float> euler_;
-
-  LibXR::Event minigimbal_event_;
-  PitMode pit_mode_ = PitMode::PITRELAX;
-  ScopeMode scope_mode_ = ScopeMode::SCOPERELAX;
-
   float scope_open_angle_ = 0.0f;
   float trig_gear_ratio_ = 36.0f;
   float motor_max_speed_ = 14976.0;
-
   Referee* referee_;
-
-  float target_pit_ = 0.0f;
-  float target_scope_ = 0.0f;
-  float pit_angle_ = 0.0f;
-  float scope_angle_ = 0.0f;
-  float init_pit_angle_ = 0.0f;
-  float init_scope_angle_ = 0.0f;
-  float pit_ = 0.0f;
-
-  bool init_flag_ = true;
-  LibXR::MillisecondTimestamp first_enter_time_ = 0;
-
-  float dt_ = 0.0f;
-  LibXR::MicrosecondTimestamp last_wakeup_;
-  LibXR::MicrosecondTimestamp last_online_time_;
-
+  LibXR::Event minigimbal_event_;
   LibXR::Thread thread_;
 
   // UI members like HeroLauncher
