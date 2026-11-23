@@ -8,6 +8,7 @@ depends:
 - id: GUET-PLDX/Motor
 - id: xrobot-org/BMI088
 - id: GUET-PLDX/Referee
+  ref: 4eb967e28d76bfb3004ddb03a565b10741f1d888
 === END MANIFEST === */
 // clang-format on
 
